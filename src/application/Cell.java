@@ -1,9 +1,5 @@
 package application;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ObservableBooleanValue;
-import javafx.beans.value.ObservableObjectValue;
 import javafx.scene.Parent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -18,9 +14,13 @@ public class Cell<square> extends Parent {
 		super();
 		this.isAlive = isAlive;
 		square = new Rectangle(50, 50);
-		square.setStroke(Color.BLACK);
-		square.setFill(isAlive ? Color.GREEN : Color.BLACK);
+		// square.setStroke(Color.BLACK);
+		square.setFill(isAlive ? Color.GREY : Color.BLACK);
 		getChildren().add(square);
+
+		square.setOnMouseClicked(event -> {
+			changeState();
+		});
 	}
 
 	public boolean isAlive() {
@@ -28,6 +28,7 @@ public class Cell<square> extends Parent {
 	}
 
 	public void setAlive(boolean isAlive) {
+		square.setFill(isAlive ? Color.GREY : Color.BLACK);
 		this.isAlive = isAlive;
 	}
 
@@ -53,9 +54,8 @@ public class Cell<square> extends Parent {
 			square.setFill(Color.BLACK);
 		} else {
 			isAlive = true;
-			square.setFill(Color.GREEN);
+			square.setFill(Color.GREY);
 		}
 	}
-
 
 }

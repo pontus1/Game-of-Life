@@ -7,43 +7,57 @@ import application.GameLogic;
 import javafx.application.Application;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 
 public class Main extends Application {
 
 	Board board;
 
-	public void startGame(Board board, BorderPane root) {
+	private void initializeGame(Board board, BorderPane root) {
+
+		Button btnStart = new Button("START");
+		
+		btnStart.getStyleClass().add("btn-start");
+		root.setAlignment(btnStart, Pos.BOTTOM_CENTER);
+
+		root.getChildren().add(board);
+		root.setBottom(btnStart);
+
+		btnStart.setOnAction(event -> {
+			startGame(board, root);
+			btnStart.setVisible(false);
+		});
+
+	}
+
+	private void startGame(Board board, BorderPane root) {
 
 		GameLogic gl = new GameLogic();
-		root.getChildren().add(board);
-		
-		
-		 Timer service = new Timer();
-	        AtomicInteger count = new AtomicInteger(0);
-	        service.setCount(count.get());
-	        service.setPeriod(Duration.millis(500));
-	        service.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 
-	            @Override
-	            public void handle(WorkerStateEvent t) {
-	                System.out.println("Called : " + t.getSource().getValue()
-	                        + " time(s)");
-	                count.set((int) t.getSource().getValue());
-	                
-	                gl.checkNeighbours(board);
-	    			board.updateBoard();
-	            }
-	        });
-	        service.start();
-		
-		
-		
-		
+		Timer service = new Timer();
+		AtomicInteger count = new AtomicInteger(0);
+		service.setCount(count.get());
+		service.setPeriod(Duration.millis(500));
+		service.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+
+			@Override
+			public void handle(WorkerStateEvent t) {
+				System.out.println("Called : " + t.getSource().getValue() + " time(s)");
+				count.set((int) t.getSource().getValue());
+
+				gl.checkNeighbours(board);
+				board.updateBoard();
+			}
+		});
+		service.start();
 
 		for (int i = 0; i < 20; i++) {
 			service.restart();
@@ -58,24 +72,16 @@ public class Main extends Application {
 
 		board.fillBoardWithCells();
 
-		// change a few
-		board.getCell(3, 4).changeState();
-		board.getCell(3, 5).changeState();
-		board.getCell(4, 3).changeState();
-		board.getCell(4, 4).changeState();
-		board.getCell(5, 4).changeState();
-
-		root.setPrefSize(500, 500);
+		root.setPrefSize(600, 500);
 		Scene scene = new Scene(root);
 
-		// scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		primaryStage.setTitle("Game of Life");
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);
 		primaryStage.show();
 
-		startGame(board, root);
-
+		initializeGame(board, root);
 	}
 
 	public static void main(String[] args) {

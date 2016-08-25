@@ -3,11 +3,10 @@ package application;
 import application.Cell;
 import javafx.scene.Parent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 
 public class Board extends Parent {
 	
-	private Cell cells[][]; 
+	private Cell[][] cells; 
 	private int height;
 	private int length;
 	private GridPane grid;
@@ -40,10 +39,6 @@ public class Board extends Parent {
 	public void cleanBoard() {
 		getChildren().remove(grid);
 	}
-//	public void drawBoard() {
-//		getChildren().remove(grid);
-//		getChildren().add(grid);
-//	}
 
 	public Cell[][] getCells() {
 		return cells;
