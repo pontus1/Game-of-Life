@@ -6,13 +6,14 @@ import javafx.scene.layout.GridPane;
 
 public class Board extends Parent {
 	
-	private Cell[][] cells; 
+	private Cell[][] cells;
+	private Cell[][] cells2;
 	private int height;
 	private int length;
 	private GridPane grid;
 
 	public Board(int height, int length) {
-		super();
+		
 		this.cells = new Cell[height][length];
 		this.grid = new GridPane();
 	}
@@ -28,7 +29,8 @@ public class Board extends Parent {
 	}
 	
 	public void updateBoard() {
-		grid.getChildren().remove(0, 99);
+		//grid.getChildren().remove(0, 99);
+		grid.getChildren().clear();
 		for (int i = 0; i < cells[0].length; i++){
 			for (int j = 0; j < cells.length; j++){
 				grid.add(cells[i][j], i, j);
@@ -46,6 +48,14 @@ public class Board extends Parent {
 
 	public void setCells(Cell[][] cells) {
 		this.cells = cells;
+	}
+	
+	public Cell[][] getCells2() {
+		return cells2;
+	}
+
+	public void setCells2(Cell[][] cells2) {
+		this.cells2 = cells2;
 	}
 	
 	public Cell getCell(int y, int x){

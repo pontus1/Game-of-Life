@@ -4,19 +4,58 @@ import application.Board;
 import application.Cell;
 
 public class GameLogic {
+	
+	Cell[][] tempCells1; 
+	Cell[][] tempCells2;
+	int count;
+	
+	public GameLogic() {
+		tempCells1 = createNewArrayWithDeadCells();
+		tempCells2 = createNewArrayWithDeadCells();
+		count = 0;
+	}
 
-	public void checkNeighbours(Board board) {
+	private Cell[][] createNewArrayWithDeadCells(){
+		Cell[][] deadCells = new Cell[50][50];
+		for (int i = 0; i < deadCells[0].length; i++){
+			for (int j = 0; j < deadCells.length; j++) {
+				deadCells[i][j] = new Cell(false);
+			}
+		}
+		return deadCells;
+	};
+	
+	private void killEmAll(Cell[][] cellsToKill){
+		for (int i = 0; i < cellsToKill[0].length; i++){
+			for (int j = 0; j < cellsToKill.length; j++) {
+				cellsToKill[i][j].setAlive(false);
+				cellsToKill[i][j].setNeighbours(0);
+			}
+		}
+	}
 
+	public void countNeighbours(Board board) {
+
+		Cell[][] temp;
+		count++;
+		if (count % 2 == 0){
+			temp = tempCells1;
+		} else {
+			temp = tempCells2;
+		}
+		
+		killEmAll(temp);
 		Cell[][] cells = board.getCells();
-
-		Cell[][] newCells = new Cell[cells.length][cells[0].length];
+		
+		
+		//Cell[][] newCells = new Cell[cells.length][cells[0].length]; //******************************************************
 
 		for (int y = 0; y < cells[0].length; y++) {
 			for (int x = 0; x < cells.length; x++) {
 
 				Cell currentCell = cells[y][x];
 
-				checkNeighbours(cells, y, x, currentCell);
+				countNeighbours(cells, y, x, currentCell);
 
 				// Any live cell with fewer than two live neighbours dies, as if
 				// caused by under-population.
@@ -32,25 +71,30 @@ public class GameLogic {
 
 				if (currentCell.isAlive()) {
 					if (currentCell.getNeighbours() < 2) {
-						newCells[y][x] = new Cell(false);
+						//newCells[y][x] = new Cell(false);  // **********************************************************
+						temp[y][x].setAlive(false);
 					} else if (currentCell.getNeighbours() < 4) {
-						newCells[y][x] = new Cell(true);
+						//newCells[y][x] = new Cell(true); // *************************************************************
+						temp[y][x].setAlive(true);
 					} else {
-						newCells[y][x] = new Cell(false);
+						//newCells[y][x] = new Cell(false);  // ************************************************************
+						temp[y][x].setAlive(false);
 					}
 				} else {
 					if (currentCell.getNeighbours() == 3) {
-						newCells[y][x] = new Cell(true);
+						//newCells[y][x] = new Cell(true);  // ******************************************************
+						temp[y][x].setAlive(true);
 					} else {
-						newCells[y][x] = new Cell(false);
+						//newCells[y][x] = new Cell(false);  // ****************************************************
+						temp[y][x].setAlive(false);
 					}
 				}
 			}
 		}
-		board.setCells(newCells);
+		board.setCells(temp);
 	}
 
-	private void checkNeighbours(Cell[][] cells, int y, int x, Cell cell) {
+	private void countNeighbours(Cell[][] cells, int y, int x, Cell cell) {
 
 		boolean topLeft = (!isOutOfBounds(y - 1, x - 1, cells)) && cells[y - 1][x - 1].isAlive();
 		boolean top = (!isOutOfBounds(y - 1, x, cells)) && cells[y - 1][x].isAlive();

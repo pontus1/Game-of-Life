@@ -24,7 +24,7 @@ public class Main extends Application {
 	private void initializeGame(Board board, BorderPane root) {
 
 		Button btnStart = new Button("START");
-		
+
 		btnStart.getStyleClass().add("btn-start");
 		root.setAlignment(btnStart, Pos.BOTTOM_CENTER);
 
@@ -45,7 +45,7 @@ public class Main extends Application {
 		Timer service = new Timer();
 		AtomicInteger count = new AtomicInteger(0);
 		service.setCount(count.get());
-		service.setPeriod(Duration.millis(500));
+		service.setPeriod(Duration.millis(10));
 		service.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 
 			@Override
@@ -53,15 +53,12 @@ public class Main extends Application {
 				System.out.println("Called : " + t.getSource().getValue() + " time(s)");
 				count.set((int) t.getSource().getValue());
 
-				gl.checkNeighbours(board);
+				gl.countNeighbours(board);
 				board.updateBoard();
 			}
 		});
 		service.start();
-
-		for (int i = 0; i < 20; i++) {
-			service.restart();
-		}
+		//service.restart();
 	}
 
 	@Override
