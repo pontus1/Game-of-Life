@@ -14,7 +14,6 @@ public class Cell<square> extends Parent {
 		super();
 		this.isAlive = isAlive;
 		square = new Rectangle(50, 50);
-		// square.setStroke(Color.BLACK);
 		square.setFill(isAlive ? Color.GREY : Color.BLACK);
 		getChildren().add(square);
 

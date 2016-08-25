@@ -4,29 +4,29 @@ import application.Board;
 import application.Cell;
 
 public class GameLogic {
-	
-	Cell[][] tempCells1; 
+
+	Cell[][] tempCells1;
 	Cell[][] tempCells2;
 	int count;
-	
+
 	public GameLogic() {
 		tempCells1 = createNewArrayWithDeadCells();
 		tempCells2 = createNewArrayWithDeadCells();
 		count = 0;
 	}
 
-	private Cell[][] createNewArrayWithDeadCells(){
+	private Cell[][] createNewArrayWithDeadCells() {
 		Cell[][] deadCells = new Cell[50][50];
-		for (int i = 0; i < deadCells[0].length; i++){
+		for (int i = 0; i < deadCells[0].length; i++) {
 			for (int j = 0; j < deadCells.length; j++) {
 				deadCells[i][j] = new Cell(false);
 			}
 		}
 		return deadCells;
 	};
-	
-	private void killEmAll(Cell[][] cellsToKill){
-		for (int i = 0; i < cellsToKill[0].length; i++){
+
+	private void killEmAll(Cell[][] cellsToKill) {
+		for (int i = 0; i < cellsToKill[0].length; i++) {
 			for (int j = 0; j < cellsToKill.length; j++) {
 				cellsToKill[i][j].setAlive(false);
 				cellsToKill[i][j].setNeighbours(0);
@@ -38,17 +38,14 @@ public class GameLogic {
 
 		Cell[][] temp;
 		count++;
-		if (count % 2 == 0){
+		if (count % 2 == 0) {
 			temp = tempCells1;
 		} else {
 			temp = tempCells2;
 		}
-		
+
 		killEmAll(temp);
 		Cell[][] cells = board.getCells();
-		
-		
-		//Cell[][] newCells = new Cell[cells.length][cells[0].length]; //******************************************************
 
 		for (int y = 0; y < cells[0].length; y++) {
 			for (int x = 0; x < cells.length; x++) {
@@ -57,35 +54,18 @@ public class GameLogic {
 
 				countNeighbours(cells, y, x, currentCell);
 
-				// Any live cell with fewer than two live neighbours dies, as if
-				// caused by under-population.
-				
-				// Any live cell with two or three live neighbours lives on to
-				// the next generation.
-				
-				// Any live cell with more than three live neighbours dies, as
-				// if by over-population.
-				
-				// Any dead cell with exactly three live neighbours becomes a
-				// live cell, as if by reproduction.
-
 				if (currentCell.isAlive()) {
 					if (currentCell.getNeighbours() < 2) {
-						//newCells[y][x] = new Cell(false);  // **********************************************************
 						temp[y][x].setAlive(false);
 					} else if (currentCell.getNeighbours() < 4) {
-						//newCells[y][x] = new Cell(true); // *************************************************************
 						temp[y][x].setAlive(true);
 					} else {
-						//newCells[y][x] = new Cell(false);  // ************************************************************
 						temp[y][x].setAlive(false);
 					}
 				} else {
 					if (currentCell.getNeighbours() == 3) {
-						//newCells[y][x] = new Cell(true);  // ******************************************************
 						temp[y][x].setAlive(true);
 					} else {
-						//newCells[y][x] = new Cell(false);  // ****************************************************
 						temp[y][x].setAlive(false);
 					}
 				}

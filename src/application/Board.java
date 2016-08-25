@@ -29,7 +29,6 @@ public class Board extends Parent {
 	}
 	
 	public void updateBoard() {
-		//grid.getChildren().remove(0, 99);
 		grid.getChildren().clear();
 		for (int i = 0; i < cells[0].length; i++){
 			for (int j = 0; j < cells.length; j++){
